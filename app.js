@@ -1,12 +1,14 @@
 const path = require('path')
 const express = require('express');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const chalk = require('chalk');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
-const connectDB = require('./config/db');
 const passport = require('passport');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const connectDB = require('./config/db');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 
@@ -36,7 +38,8 @@ app.set('view engine', '.hbs');
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store : new MongoStore({mongooseConnection: mongoose.connection})
 }))
 
 
