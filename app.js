@@ -11,6 +11,7 @@ const MongoStore = require('connect-mongo')(session);
 const connectDB = require('./config/db');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const storiesRouter = require('./routes/stories');
 
 // ** Load Config file
 dotenv.config({ path: './config/config.env'});
@@ -55,6 +56,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ** routes
 app.use('/',indexRouter);
 app.use('/auth',authRouter);
+app.use('/stories',storiesRouter);
 
 
 const PORT = process.env.PORT || 3000;
