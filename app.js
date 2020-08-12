@@ -25,14 +25,23 @@ connectDB()
 
 const app = express();
 
+// ** Body parser 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
 // ** HTTP request loger middleware 'Logging'
 if(process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'));
 }
 
+ // ** handlebars helpers 
+ const {formatDate} = require('./halper/hbs')
+
+
 // ** Setting the app's "view engine" setting will make that value the default file extension used for looking up views.
 // ** Handlebars
-app.engine('.hbs', exphbs({defaultLayout: 'main', extname: '.hbs'}));
+app.engine('.hbs', exphbs({helpers: {formatDate}, defaultLayout: 'main', extname: '.hbs'}));
 app.set('view engine', '.hbs');
 
 // ** session
@@ -49,7 +58,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// static forlder 
+// ** static forlder 
 app.use(express.static(path.join(__dirname, 'public')));
 
 
