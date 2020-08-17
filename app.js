@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const passport = require('passport');
 const session = require('express-session');
+// const bodyParser = require('body-parser');
 const MongoStore = require('connect-mongo')(session);
 const connectDB = require('./config/db');
 const indexRouter = require('./routes/index');
@@ -36,12 +37,12 @@ if(process.env.NODE_ENV === 'development'){
 }
 
  // ** handlebars helpers 
- const {formatDate,truncate,stripTags} = require('./halper/hbs')
+ const {formatDate,truncate,stripTags,editIcon} = require('./halper/hbs')
 
 
 // ** Setting the app's "view engine" setting will make that value the default file extension used for looking up views.
 // ** Handlebars
-app.engine('.hbs', exphbs({helpers: {formatDate,truncate,stripTags}, defaultLayout: 'main', extname: '.hbs'}));
+app.engine('.hbs', exphbs({helpers: {formatDate,truncate,stripTags,editIcon}, defaultLayout: 'main', extname: '.hbs'}));
 app.set('view engine', '.hbs');
 
 // ** session
@@ -52,11 +53,19 @@ app.use(session({
     store : new MongoStore({mongooseConnection: mongoose.connection})
 }))
 
+// ** set body bodyParser
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // ** passport middleware 
 app.use(passport.initialize());
 app.use(passport.session());
+
+// ** set global variable
+app.use(function(req,res,next) {
+  res.locals.user = req.user || null
+  next();
+})
 
 // ** static forlder 
 app.use(express.static(path.join(__dirname, 'public')));
