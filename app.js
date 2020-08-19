@@ -37,12 +37,12 @@ if(process.env.NODE_ENV === 'development'){
 }
 
  // ** handlebars helpers 
- const {formatDate,truncate,stripTags,editIcon} = require('./halper/hbs')
+ const {formatDate,truncate,stripTags,editIcon,select} = require('./halper/hbs')
 
 
 // ** Setting the app's "view engine" setting will make that value the default file extension used for looking up views.
 // ** Handlebars
-app.engine('.hbs', exphbs({helpers: {formatDate,truncate,stripTags,editIcon}, defaultLayout: 'main', extname: '.hbs'}));
+app.engine('.hbs', exphbs({helpers: {formatDate,truncate,stripTags,editIcon,select, defaultLayout: 'main', extname: '.hbs'}));
 app.set('view engine', '.hbs');
 
 // ** session
