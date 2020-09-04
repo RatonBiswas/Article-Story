@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const chalk = require('chalk');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
+const methodOverride = require('method-override')
 const passport = require('passport');
 const session = require('express-session');
 // const bodyParser = require('body-parser');
@@ -36,13 +37,25 @@ if(process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'));
 }
 
+// ** Method Overrride middleware put and delete 
+app.use(methodOverride(function (req, res) {
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    var method = req.body._method
+    delete req.body._method
+    return method
+  }
+}))
+
  // ** handlebars helpers 
  const {formatDate,truncate,stripTags,editIcon,select} = require('./halper/hbs')
 
 
 // ** Setting the app's "view engine" setting will make that value the default file extension used for looking up views.
 // ** Handlebars
-app.engine('.hbs', exphbs({helpers: {formatDate,truncate,stripTags,editIcon,select, defaultLayout: 'main', extname: '.hbs'}));
+app.engine(
+  '.hbs', 
+  exphbs({helpers: {formatDate,truncate,stripTags,editIcon,select}, defaultLayout: 'main', extname: '.hbs',}));
 app.set('view engine', '.hbs');
 
 // ** session
