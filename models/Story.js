@@ -3,16 +3,16 @@ const mongoose = require('mongoose');
 const StorySchema = new mongoose.Schema({
     title: {
         type: String,
-        required: [true,'A story must have a title'],
+        required: [true, 'A story must have a title'],
         trim: true
     },
     body: {
         type: String,
-        required: [true,'A story must have a body']
+        required: [true, 'A story must have a body']
     },
     status: {
         type: String,
-        default:'public',
+        default: 'public',
         enum: ['public', 'private']
     },
     user: {
@@ -25,5 +25,5 @@ const StorySchema = new mongoose.Schema({
     }
 })
 
-const Story = mongoose.model('Story',StorySchema);
+const Story = mongoose.model('Story', StorySchema);
 module.exports = Story;

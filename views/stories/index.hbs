@@ -1,13 +1,13 @@
 <div class="row">
     <div class="col s8"><h4>Stories</h4></div>         
-    <storieform action="/search" method="POST" class="col s4 float-right">
+    <form action="/stories/search" method="POST" class="col s4 float-right">
         <div class="">
             <div class="input-field float-right">
                 <input type="text" id="search" name="search">
                  <label for="search">Search</label>
             </div>
         </div>
-    </storieform>
+    </form>
     <br>
     <br>
     {{#each stories}}
@@ -20,8 +20,8 @@
             </div>
            
             <div class="card-content center-align">
-                <h5>{{title}}</h5>
-                <p>{{stripTags (truncate body 50)}}</p>
+                <h5>{{stripTags (truncate title 30)}}</h5>
+                <p>{{stripTags (truncate body 30)}}</p>
                 <br>
                 <div class="chip">
                     <img src="{{user.image}}" alt="image">
@@ -37,4 +37,5 @@
     {{else}}
     <P>No stories to display</P>
     {{/each}}
+    
 </div>

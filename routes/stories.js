@@ -62,6 +62,7 @@ router.get('/', ensureAuth, async (req, res) => {
                 createdAt: -1
             })
             .lean()
+
         res.render('stories/index', {
             stories,
         })
@@ -156,5 +157,47 @@ router.get('/user/:userId', ensureAuth, async (req, res) => {
         res.render('error/500')
     }
 })
+
+// ! @desc search any content 
+// ! @route Get/stories/search
+router.post('/search', ensureAuth, async (req, res) => {
+    try {
+        const {
+            search
+        } = req.body;
+        const stories = await Story.find({
+            $or: [{
+                    title: {
+                        $regex: search,
+                        $options: 'i'
+                    }
+                },
+                {
+                    status: {
+                        $regex: search,
+                        $options: 'i'
+                    }
+                },
+                {
+                    'user.displayName': {
+                        $regex: search,
+                        $options: 'i'
+                    }
+                },
+            ],
+            status: 'public'
+        }).populate('user').sort({
+            createdAt: -1
+        }).lean();
+        console.log(stories);
+        res.render('stories/index', {
+            stories
+        })
+    } catch (err) {
+        console.error(err);
+        res.render('error/500')
+    }
+})
+
 
 module.exports = router
